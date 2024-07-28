@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'home_page.dart';
 import 'register.dart';
 import 'user.dart';
@@ -19,7 +21,6 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // FlutterLogo(size: 100), // Remove this line to eliminate the Flutter logo
             SizedBox(height: 16),
             TextField(
               controller: _emailController,
@@ -90,6 +91,39 @@ class LoginPage extends StatelessWidget {
                 );
               },
               child: Text('New User? Create Account'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                const url = 'https://github.com/SAGAR-app/database_flutter_project';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Could not launch $url')),
+                  );
+                }
+              },
+              child: Text('Visit Website'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 36),
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                const phoneNumber = '+123456789'; // Replace with your support phone number
+                bool? res = await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                if (res == false) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Could not initiate call to $phoneNumber')),
+                  );
+                }
+              },
+              child: Text('Call Support'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 36),
+              ),
             ),
           ],
         ),
